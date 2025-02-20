@@ -1,68 +1,31 @@
 // @todo: Темплейт карточки
 
-    function deleteCard (deleteButton) {
-        let closestCard = deleteButton.target.closest('.card');
-        closestCard.remove(closestCard);
-    }
+function deleteCard(deleteButton) {
+  let closestCard = deleteButton.target.closest(".card");
+  closestCard.remove();
+}
 
-   
+let cardsContainer = document.querySelector(".places__list");
 
-   
+function createСard(cardData, deleteCard) {
+  const cardTemplate = document.querySelector("#card-template").content;
+  let cardElement = cardTemplate.querySelector(".card").cloneNode(true);
 
-    
-    function createСard (cardData,deleteCard) {
-        
-        const cardTemplate = document.querySelector('#card-template').content;
-        let cardElement = cardTemplate.querySelector('.card').cloneNode(true);
-        
+  cardElement.querySelector(".card__image").src = cardData.link;
+  cardElement.querySelector(".card__image").alt = cardData.name;
+  cardElement.querySelector(".card__title").textContent = cardData.name;
 
-        cardElement.querySelector('.card__image').src = cardData.link;
-        cardElement.querySelector('.card__image').alt = cardData.name;
-        cardElement.querySelector('.card__title').textContent = cardData.name;
+  let deleteButton = cardElement.querySelector(".card__delete-button");
+  deleteButton.addEventListener("click", deleteCard);
 
-        cardItem.append(cardElement);
+  return cardElement;
+}
 
+initialCards.forEach(function (cardData) {
+  const newCard = createСard(cardData, deleteCard);
 
-        let deleteButton = cardElement.querySelector('.card__delete-button');
-        deleteButton.addEventListener('click', deleteCard);
-        
-    }
-    
-    let cardItem = document.querySelector('.places__list');
-    
-    initialCards.forEach(function(element) {
-        createСard(element,deleteCard)
-    });
-        
-    
-
-    
-   
-
-    
-
-
-    // for (let i = 0; i < initialCards.length; i++) {
-
-    //     let cardTemplate = document.querySelector('#card-template').content;
-    //     let userElement = cardTemplate.querySelector('.card').cloneNode(true);
-
-    //     userElement.querySelector('.card__image').src = initialCards[i].link;
-    //     userElement.querySelector('.card__title').textContent = initialCards[i].name;
-
-    //     cardItem.append(userElement);
-        
-    // }
-
-    
-
-    
-   
-
-
-
-
-
+  cardsContainer.append(newCard);
+});
 
 // @todo: DOM узлы
 
