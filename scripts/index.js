@@ -1,8 +1,8 @@
 // @todo: Темплейт карточки
 
-    function cardDelet (deletButton) {
-        let delet = deletButton.target.closest('.card');
-        delet.remove(delet);
+    function deleteCard (deleteButton) {
+        let closestCard = deleteButton.target.closest('.card');
+        closestCard.remove(closestCard);
     }
 
    
@@ -10,27 +10,28 @@
    
 
     
-    function createСard (initialCards,cardDelet) {
+    function createСard (cardData,deleteCard) {
         
-        let cardTemplate = document.querySelector('#card-template').content;
-        let userElement = cardTemplate.querySelector('.card').cloneNode(true);
+        const cardTemplate = document.querySelector('#card-template').content;
+        let cardElement = cardTemplate.querySelector('.card').cloneNode(true);
         
 
-        userElement.querySelector('.card__image').src = initialCards.link;
-        userElement.querySelector('.card__title').textContent = initialCards.name;
+        cardElement.querySelector('.card__image').src = cardData.link;
+        cardElement.querySelector('.card__image').alt = cardData.name;
+        cardElement.querySelector('.card__title').textContent = cardData.name;
 
-        cardItem.append(userElement);
+        cardItem.append(cardElement);
 
 
-        let deletButton = userElement.querySelector('.card__delete-button');
-        deletButton.addEventListener('click', cardDelet);
+        let deleteButton = cardElement.querySelector('.card__delete-button');
+        deleteButton.addEventListener('click', deleteCard);
         
     }
     
     let cardItem = document.querySelector('.places__list');
     
     initialCards.forEach(function(element) {
-        createСard(element,cardDelet)
+        createСard(element,deleteCard)
     });
         
     
