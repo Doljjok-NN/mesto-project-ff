@@ -1,5 +1,3 @@
-import { openImageModal } from "./modal.js";
-
 // --------------------------Удаление карточки--------------------------------
 export function deleteCard(deleteButton) {
   const closestCard = deleteButton.target.closest(".card");
@@ -14,7 +12,7 @@ export function likeCard(like) {
 }
 
 // ---------------------------СОЗДАНИЕ КАРТОЧКИ-------------------------------
-export function createСard(cardData, deleteCard, likeCard) {
+export function createСard(cardData, deleteCard, likeCard, openImageModal) {
   const cardTemplate = document.querySelector("#card-template").content;
   const cardElement = cardTemplate.querySelector(".card").cloneNode(true);
   const cardImage = cardElement.querySelector(".card__image");
