@@ -7,6 +7,7 @@
   background-size: cover;
   background-position: center;
   margin: 0 29px 0 0;
+  position: relative;
 }
 
 @media screen and (max-width: 740px) {
@@ -20,3 +21,19 @@
     margin-right: 0;
   }
 }
+
+
+.profile__image:hover {
+  opacity: 0.2;
+  cursor: pointer;
+}
+
+.new-logo {
+  width: 26px;
+  height: 26px;
+  top:85px;
+  left:50px;
+  position: absolute;
+}
+
+

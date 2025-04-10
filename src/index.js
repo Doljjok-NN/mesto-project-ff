@@ -1,19 +1,43 @@
 import "./index.css";
-import { initialCards } from "./cards.js";
-import { createСard, deleteCard, likeCard } from "./card.js";
+import { createСard } from "./card.js";
 import { closeModal, openModal } from "./modal.js";
 import { enableValidation } from "./validate.js";
-import { getProfil, getProfileEdit, getCard } from "./api.js";
+import {
+  getProfil,
+  getCard,
+  addCard,
+  deleteCard,
+  likeCard,
+  deleteLike,
+} from "./api.js";
+import { changeAvatarProfile, saveAvatar } from "./avatar.js";
+import { profileSubmit, formEditProfile } from "./profile.js";
 import { data } from "autoprefixer";
 
-// ------------------СОЗДАНИЕ КАРТОЧКИ----------------------------------------------
 const cardsContainer = document.querySelector(".places__list");
 
+//------------------------------USER ID , AVATAR----------------------------------
+let userId;
+
+function initi(user) {
+  userId = user._id;
+  changeAvatarProfile(user.avatar);
+}
+getProfil().then(initi);
+
+// ------------------------СОЗДАНИЕ КАРТОЧКИ----------------------------------------------
 getCard()
   .then((cardArray) => {
     cardArray.reverse();
     cardArray.forEach((card) => {
-      const newCard = createСard(card, deleteCard, likeCard, openImageModal);
+      const newCard = createСard(
+        card,
+        deleteCard,
+        likeCard,
+        deleteLike,
+        openImageModal,
+        userId
+      );
       cardsContainer.append(newCard);
     });
   })
@@ -30,65 +54,59 @@ popup.forEach(function (event) {
   );
 });
 const profileEditButton = document.querySelector(".profile__edit-button");
-const popupTypeEdit = document.querySelector(".popup_type_edit");
+export const popupTypeEdit = document.querySelector(".popup_type_edit");
 
 const popuTypeNewCard = document.querySelector(".popup_type_new-card");
 const profileAddButton = document.querySelector(".profile__add-button");
+
+const popupAvatar = document.querySelector(".popup_type_avatar");
+const profileAvatar = document.querySelector(".profile__image");
 
 const imgModalClose = document.querySelector("#Close_img");
 
 profileEditButton.addEventListener("click", () => openModal(popupTypeEdit));
 profileAddButton.addEventListener("click", () => openModal(popuTypeNewCard));
+profileAvatar.addEventListener("click", () => openModal(popupAvatar));
 
 imgModalClose.addEventListener("click", () => closeModal(popupImageModalka));
 
-// ---------------------------------ФОРМА-----------------------------------------------------
-const formEditProfile = document.querySelector("#profile_form");
-const formNameInput = formEditProfile.querySelector(".popup__input_type_name");
-const formWorkInput = formEditProfile.querySelector(".popup__input_type_description");
-const inputName = document.querySelector(".profile__title");
-const inputWork = document.querySelector(".profile__description");
-
-function profileSubmit(evt) {
-  evt.preventDefault();
-  getProfileEdit(formNameInput.value, formWorkInput.value)
-    .then((data) => {
-      inputName.textContent = data.name;
-      inputWork.textContent = data.about;
-      closeModal(popupTypeEdit);
-    })
-    .catch((err) => {
-      console.log(`Ошибка ${err}`);
-    });
-}
+// // ---------------------------------ПРОФИЛЬ-----------------------------------------------------
 
 formEditProfile.addEventListener("submit", profileSubmit);
 
-// -----------------ПОЛУЧЕНИЕ ДАННЫХ ФОРМЫ С СЕРВЕРА---------------------
-function init(users) {
-  inputName.textContent = users.name;
-  inputWork.textContent = users.about;
-}
-getProfil().then(init);
-
 //-------------------------ДОБАВЛЕНИЕ КАРТОЧКИ-----------------------------------------------
 const formNewCard = document.getElementById("form_card");
+const buttonCards = document.querySelector(".button-cards");
 formNewCard.addEventListener("submit", function (evt) {
   evt.preventDefault();
+
   const addNewCardName = document.querySelector(
     ".popup__input_type_card-name"
   ).value;
   const addNewCardUrl = document.querySelector(".popup__input_type_url").value;
+  setSubmitButtonStatus(buttonCards, true);
+  addCard(addNewCardName, addNewCardUrl)
+    .then((card) => {
+      const addNewCard = createСard(
+        card,
+        deleteCard,
+        likeCard,
+        deleteLike,
+        openImageModal,
+        userId
+      );
 
-  const item = {
-    link: addNewCardUrl,
-    name: addNewCardName,
-  };
+      cardsContainer.prepend(addNewCard);
+      closeModal(popuTypeNewCard);
+    })
+    .catch((err) => {
+      console.log(`Ошибка ${err}`);
+    })
+    .finally(() => {
+      setSubmitButtonStatus(buttonCards, false);
+    });
 
-  const newCard = createСard(item, deleteCard, likeCard, openImageModal);
-  cardsContainer.prepend(newCard);
   formNewCard.reset();
-  closeModal(popuTypeNewCard);
 });
 
 // --------------------------------ОТКРЫТИЕ КАРТИНКИ------------------------------------------------
@@ -106,3 +124,16 @@ function openImageModal(styleImag, textImg) {
 // ----------------------------ВАЛИДАЦИЯ----------------------------------------
 enableValidation();
 
+// ----------------------------АВАТАР--------------------------
+const popupFormAvatar = document.querySelector("#avatar_form");
+
+popupFormAvatar.addEventListener("submit", saveAvatar);
+
+// -----------------------------------UX FORM-------------------
+export function setSubmitButtonStatus(button, save) {
+  if (save) {
+    button.textContent = "Сохранение...";
+  } else {
+    button.textContent = "Сохранить";
+  }
+}
