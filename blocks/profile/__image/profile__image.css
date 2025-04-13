@@ -36,4 +36,15 @@
   position: absolute;
 }
 
+@media (max-width: 477px) {
+  .new-logo {
+    left: 200px;
+  }
+}
 
+
+@media (min-width: 228px) {
+  .new-logo {
+    right: 200px;
+  }
+}
