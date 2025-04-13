@@ -19,7 +19,7 @@ function hideInputError(formElement, inputElement, valid) {
   errorElement.textContent = "";
 }
 
-function diableSubmitButton(button, valid) {
+function disableSubmitButton(button, valid) {
   button.disabled = false;
   button.classList.remove(valid.inActiveButton);
 }
@@ -31,7 +31,7 @@ export function clearValidation(form, valid) {
     evt.value = "";
     hideInputError(form, evt, valid);
   });
-  diableSubmitButton(buttonClear, valid);
+  disableSubmitButton(buttonClear, valid);
 }
 
 function checkInputValidity(formElement, inputElement, valid) {
@@ -97,11 +97,8 @@ function hasInvalidInput(inputList) {
 function toggleButtonState(inputList, buttonElement, valid) {
   if (hasInvalidInput(inputList)) {
     buttonElement.disabled = true;
-
     buttonElement.classList.add(valid.inActiveButton);
   } else {
-    buttonElement.disabled = false;
-
-    buttonElement.classList.remove(valid.inActiveButton);
+    disableSubmitButton(buttonElement, valid);
   }
 }
