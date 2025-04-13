@@ -4,4 +4,9 @@
   opacity: 1;
   pointer-events: all;
   transition: visibility 0s, opacity 0.6s;
+  
+}
+
+.popup__content-avatar {
+  min-height: 272px;
 }

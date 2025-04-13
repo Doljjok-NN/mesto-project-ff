@@ -40,14 +40,14 @@
 
         <form id="profile_form" class="popup__form" name="edit-profile" novalidate>
 
-          <input id="form__input" type="text" name="name" minlength="2" maxlength="40" pattern="^[а-яА-ЯёЁa-zA-Z\-\s]+$"
+          <input id="form__input" type="text" name="name" minlength="2" maxlength="40" pattern="^[а-яА-ЯёЁa-zA-Z\-\s]+$" data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы"
             class="popup__input popup__input_type_name" placeholder="Имя" required />
           <span class="form__input-error"></span>
 
 
 
           <input id="form__input" type="text" name="description" minlength="2" maxlength="200"
-            pattern="^[а-яА-ЯёЁa-zA-Z\-\s]+$" class="popup__input popup__input_type_description" placeholder="Занятие"
+            pattern="^[а-яА-ЯёЁa-zA-Z\-\s]+$" data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы" class="popup__input popup__input_type_description" placeholder="Занятие"
             required />
           <span class="form__input-error error__description"></span>
 
@@ -66,7 +66,7 @@
         <form id="form_card" class="popup__form" name="new-place" novalidate>
 
           <input id="form__input" type="text" name="place-name" minlength="2" maxlength="40"
-            pattern="^[а-яА-ЯёЁa-zA-Z\-\s]+$" class="popup__input popup__input_type_card-name" placeholder="Название"
+            pattern="^[а-яА-ЯёЁa-zA-Z\-\s]+$" data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы" class="popup__input popup__input_type_card-name" placeholder="Название"
             required />
           <span class="form__input-error"></span>
 
@@ -88,7 +88,7 @@
       </div>
     </div>
     <div class="popup popup_type_avatar">
-      <div class="popup__content">
+      <div class="popup__content popup__content-avatar">
         <button type="button" class="popup__close"></button>
         <h3 class="popup__title">Обновить аватар</h3>
         <form id="avatar_form" class="popup__form_avatar popup__form" name="edit-avatar" novalidate>

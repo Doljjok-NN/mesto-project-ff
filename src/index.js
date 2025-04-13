@@ -4,41 +4,32 @@ import { closeModal, openModal } from "./modal.js";
 import { enableValidation } from "./validate.js";
 import {
   getProfil,
-  getCard,
   addCard,
   deleteCard,
   likeCard,
   deleteLike,
+  getCard,
 } from "./api.js";
-import { changeAvatarProfile, saveAvatar } from "./avatar.js";
-import { profileSubmit, formEditProfile } from "./profile.js";
-import { data } from "autoprefixer";
-
-const cardsContainer = document.querySelector(".places__list");
+import { saveAvatar } from "./avatar.js";
+import { profileSubmit, formEditProfile, initProfil } from "./profile.js";
+import {
+  valid,
+  cardsContainer,
+  popupTypeEdit,
+  setSubmitButtonStatus,
+} from "./utils.js";
 
 //------------------------------USER ID , AVATAR----------------------------------
 let userId;
-
-function initi(user) {
-  userId = user._id;
-  changeAvatarProfile(user.avatar);
-}
-getProfil().then(initi);
-
-// ------------------------СОЗДАНИЕ КАРТОЧКИ----------------------------------------------
-getCard()
-  .then((cardArray) => {
-    cardArray.reverse();
-    cardArray.forEach((card) => {
-      const newCard = createСard(
-        card,
-        deleteCard,
-        likeCard,
-        deleteLike,
-        openImageModal,
-        userId
+Promise.all([getProfil(), getCard()])
+  .then(([profile, newCard]) => {
+    userId = profile;
+    initProfil(profile);
+    newCard.reverse();
+    newCard.forEach((card) => {
+      cardsContainer.append(
+        createСard(card, deleteCards, openImageModal, userId, likes)
       );
-      cardsContainer.append(newCard);
     });
   })
   .catch((err) => {
@@ -46,16 +37,14 @@ getCard()
   });
 
 //------------------------- ОТКРЫТИЕ И ЗАКРЫТИЕ ПОПАПОВ НА КРЕСТИК---------------------
-const popup = document.querySelectorAll(".popup");
-popup.forEach(function (event) {
+const popups = document.querySelectorAll(".popup");
+popups.forEach(function (event) {
   const popupClose = document.querySelectorAll(".popup__close");
   popupClose.forEach((evt) =>
     evt.addEventListener("click", () => closeModal(event))
   );
 });
 const profileEditButton = document.querySelector(".profile__edit-button");
-export const popupTypeEdit = document.querySelector(".popup_type_edit");
-
 const popuTypeNewCard = document.querySelector(".popup_type_new-card");
 const profileAddButton = document.querySelector(".profile__add-button");
 
@@ -89,11 +78,10 @@ formNewCard.addEventListener("submit", function (evt) {
     .then((card) => {
       const addNewCard = createСard(
         card,
-        deleteCard,
-        likeCard,
-        deleteLike,
+        deleteCards,
         openImageModal,
-        userId
+        userId,
+        likes
       );
 
       cardsContainer.prepend(addNewCard);
@@ -114,7 +102,7 @@ const popupImageModalka = document.querySelector(".popup_type_image");
 const imgStylePopup = document.querySelector(".popup__image");
 const imageModalText = document.querySelector(".popup__caption");
 
-function openImageModal(styleImag, textImg) {
+export function openImageModal(styleImag, textImg) {
   imgStylePopup.src = styleImag.src;
   imgStylePopup.alt = styleImag.alt;
   imageModalText.textContent = textImg;
@@ -122,18 +110,37 @@ function openImageModal(styleImag, textImg) {
 }
 
 // ----------------------------ВАЛИДАЦИЯ----------------------------------------
-enableValidation();
+enableValidation(valid);
 
 // ----------------------------АВАТАР--------------------------
 const popupFormAvatar = document.querySelector("#avatar_form");
 
 popupFormAvatar.addEventListener("submit", saveAvatar);
 
-// -----------------------------------UX FORM-------------------
-export function setSubmitButtonStatus(button, save) {
-  if (save) {
-    button.textContent = "Сохранение...";
-  } else {
-    button.textContent = "Сохранить";
-  }
+// ------------------------------УДАЛЕНИЕ КАРТОЧКИ---------------------------------------------
+export function deleteCards(cardId, card) {
+  deleteCard(cardId)
+    .then((res) => {
+      card.remove();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+}
+
+// ------------------------------ФУНКЦИЯ ЛАЙКА КАРТОЧЕК-------------------------------------
+export function likes(cardId, userId, likeElement, evt) {
+  const likeButton = evt.target;
+  const likeMethod = cardId.likes.some((like) => like._id === userId)
+    ? deleteLike
+    : likeCard;
+  likeMethod(cardId._id)
+    .then((resCard) => {
+      cardId.likes = resCard.likes;
+      likeButton.classList.toggle("card__like-button_is-active");
+      likeElement.textContent = resCard.likes.length;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 }

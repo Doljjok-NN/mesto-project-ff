@@ -30,7 +30,7 @@ export function getProfil() {
 }
 
 //Редактирование профиля
-export function getProfileEdit(name, about) {
+export function profileEdit(name, about) {
   return fetch(`${config.baseUrl}/users/me`, {
     method: "PATCH",
     headers: config.headers,

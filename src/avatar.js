@@ -1,6 +1,6 @@
 import { changeAvatar } from "./api";
 import { closeModal } from "./modal";
-import {setSubmitButtonStatus} from "./index"
+import {setSubmitButtonStatus} from "./utils"
 
 const popupAvatara = document.querySelector(".popup_type_avatar");
 const popupFormAvatar = document.querySelector("#avatar_form");
