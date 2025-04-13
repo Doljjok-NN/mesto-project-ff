@@ -152,3 +152,4 @@ export function likes(cardId, userId, likeElement, evt) {
       console.log(err);
     });
 }
+
