@@ -36,7 +36,7 @@
   position: absolute;
 }
 
-@media (max-width: 477px) {
+@media (max-width: 481px) {
   .new-logo {
     left: 200px;
   }

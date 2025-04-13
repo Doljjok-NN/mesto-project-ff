@@ -1,7 +1,7 @@
 import "./index.css";
 import { createСard } from "./card.js";
 import { closeModal, openModal } from "./modal.js";
-import { enableValidation } from "./validate.js";
+import { enableValidation, clearValidation } from "./validate.js";
 import {
   getProfil,
   addCard,
@@ -37,13 +37,21 @@ Promise.all([getProfil(), getCard()])
   });
 
 //------------------------- ОТКРЫТИЕ И ЗАКРЫТИЕ ПОПАПОВ НА КРЕСТИК---------------------
-const popups = document.querySelectorAll(".popup");
+const formsClean = document.querySelectorAll(valid.formsPopup);
+formsClean.forEach(function (event) {
+  const popupClose = document.querySelectorAll(valid.popupClose);
+  popupClose.forEach((evt) => {
+    evt.addEventListener("click", () => clearValidation(valid));
+  });
+});
+const popups = document.querySelectorAll(valid.popup);
 popups.forEach(function (event) {
-  const popupClose = document.querySelectorAll(".popup__close");
+  const popupClose = document.querySelectorAll(valid.popupClose);
   popupClose.forEach((evt) =>
     evt.addEventListener("click", () => closeModal(event))
   );
 });
+
 const profileEditButton = document.querySelector(".profile__edit-button");
 const popuTypeNewCard = document.querySelector(".popup_type_new-card");
 const profileAddButton = document.querySelector(".profile__add-button");
