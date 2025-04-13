@@ -38,13 +38,18 @@
 
 @media (max-width: 481px) {
   .new-logo {
-    left: 200px;
+    left: 160px;
   }
 }
 
-
-@media (min-width: 228px) {
+@media (max-width: 290px) {
   .new-logo {
-    right: 200px;
+    left: 100px;
+  }
+}
+
+@media (min-width: 349px) {
+  .new-logo {
+    right: 300px;
   }
 }

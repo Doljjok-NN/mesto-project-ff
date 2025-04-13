@@ -39,11 +39,17 @@ Promise.all([getProfil(), getCard()])
 //------------------------- ОТКРЫТИЕ И ЗАКРЫТИЕ ПОПАПОВ НА КРЕСТИК---------------------
 const formsClean = document.querySelectorAll(valid.formsPopup);
 formsClean.forEach(function (event) {
+  const popupOpen = document.querySelectorAll(".valid-buttons");
+  popupOpen.forEach((evt) => {
+    console.log(evt);
+    evt.addEventListener("click", () => clearValidation(event, valid));
+  });
   const popupClose = document.querySelectorAll(valid.popupClose);
   popupClose.forEach((evt) => {
-    evt.addEventListener("click", () => clearValidation(valid));
+    evt.addEventListener("click", () => clearValidation(event, valid));
   });
 });
+
 const popups = document.querySelectorAll(valid.popup);
 popups.forEach(function (event) {
   const popupClose = document.querySelectorAll(valid.popupClose);
@@ -62,6 +68,7 @@ const profileAvatar = document.querySelector(".profile__image");
 const imgModalClose = document.querySelector("#Close_img");
 
 profileEditButton.addEventListener("click", () => openModal(popupTypeEdit));
+
 profileAddButton.addEventListener("click", () => openModal(popuTypeNewCard));
 profileAvatar.addEventListener("click", () => openModal(popupAvatar));
 
@@ -152,4 +159,3 @@ export function likes(cardId, userId, likeElement, evt) {
       console.log(err);
     });
 }
-

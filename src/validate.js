@@ -1,9 +1,5 @@
-import { valid } from "./utils";
-
-// В функции showInputError  и hideInputError пришлось вставить из импорта, всячески пытался довести
-// valid из других функций до них, проверял через console.log, но так и не нашел способ
-
-function showInputError(formElement, inputElement, errorMessage) {
+function showInputError(formElement, inputElement, errorMessage, valid) {
+  console.log(valid);
   const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
 
   inputElement.classList.add(valid.inputTypeError);
@@ -13,7 +9,7 @@ function showInputError(formElement, inputElement, errorMessage) {
   errorElement.classList.add(valid.inputTypeErrorActive);
 }
 
-function hideInputError(formElement, inputElement) {
+function hideInputError(formElement, inputElement, valid) {
   const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
 
   inputElement.classList.remove(valid.inputTypeError);
@@ -23,22 +19,19 @@ function hideInputError(formElement, inputElement) {
   errorElement.textContent = "";
 }
 
-export function clearValidation(valid) {
-  const buttonClear = document.querySelectorAll(valid.formsPopupButton);
-  buttonClear.forEach((evt) => {
-    evt.disabled = false;
-    evt.classList.remove(valid.inActiveButton);
-  });
-  const inputClear = document.querySelectorAll(valid.formSelector);
-  inputClear.forEach((evt) => {
-    evt.classList.remove(valid.inputTypeError);
+function diableSubmitButton(button, valid) {
+  button.disabled = false;
+  button.classList.remove(valid.inActiveButton);
+}
+
+export function clearValidation(form, valid) {
+  const buttonClear = form.querySelector(valid.formsPopupButton);
+  const inputs = form.querySelectorAll(valid.formSelector);
+  inputs.forEach((evt) => {
     evt.value = "";
+    hideInputError(form, evt, valid);
   });
-  const errorClass = document.querySelectorAll(valid.inputErrorClass);
-  errorClass.forEach((evt) => {
-    evt.classList.remove(valid.inputTypeErrorActive);
-    evt.textContent = "";
-  });
+  diableSubmitButton(buttonClear, valid);
 }
 
 function checkInputValidity(formElement, inputElement, valid) {
@@ -74,12 +67,7 @@ function setEventListeners(formElement, valid) {
 
   inputList.forEach((inputElement) => {
     inputElement.addEventListener("input", function () {
-      checkInputValidity(
-        formElement,
-        inputElement,
-        inputElement.validationMessage,
-        valid
-      );
+      checkInputValidity(formElement, inputElement, valid);
 
       buttonElement.forEach((evt) => {
         toggleButtonState(inputList, evt, valid);
